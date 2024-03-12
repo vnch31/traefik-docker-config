@@ -10,7 +10,7 @@ services:
       - --providers.docker.network=traefik_network
       - --entrypoints.web.address=:80
       # (Optional) Database (in this case Postgres)
-      - --entrypoint.database.address=:5432
+      - --entrypoints.database.address=:5432
       # (Recommended) Https
       - --entrypoints.web.http.redirections.entryPoint.to=websecure
       - --entrypoints.web.http.redirections.entryPoint.scheme=https
@@ -38,7 +38,7 @@ services:
 
       # expose the traefik dashboard
       - traefik.http.routers.traefik.entrypoints=websecure
-      - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAINNAME}`)
+      - traefik.http.routers.traefik.rule=Host(`admin.${DOMAINNAME}`)
       - traefik.http.routers.traefik.service=api@internal
       - traefik.http.routers.traefik.middlewares=admin
       - traefik.http.routers.traefik.tls.certresolver=letsencryptresolver

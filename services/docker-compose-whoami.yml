@@ -7,7 +7,7 @@ services:
       - traefik_network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`<domain-name>`)"
+      - "traefik.http.routers.whoami.rule=Host(`${DOMAINNAME}`)"
       - "traefik.http.routers.whoami.entrypoints=web, websecure"
       - "traefik.http.routers.whoami.tls.certresolver=letsencryptresolver"
       - "traefik.http.services.whoami.loadbalancer.server.port=80"

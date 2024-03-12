@@ -14,9 +14,6 @@ services:
       # (Recommended) Https
       - --entrypoints.web.http.redirections.entryPoint.to=websecure
       - --entrypoints.web.http.redirections.entryPoint.scheme=https
-      # (Optional) Database (in this case Postgres)
-      - --entrypoints.database.redirections.entryPoint.to=websecure
-      - --entrypoints.database.redirections.entryPoint.scheme=https
       - --entrypoints.websecure.address=:443
       - --certificatesresolvers.letsencryptresolver.acme.email=${EMAIL}
       - --certificatesresolvers.letsencryptresolver.acme.storage=/acme.json

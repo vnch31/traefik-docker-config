@@ -1,0 +1,45 @@
+services:
+  traefik:
+    image: traefik
+    restart: unless-stopped
+    network:
+      - traefik_network
+    commands:
+      - --providers.docker
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.network=traefik_network
+      - --entrypoints.web.address=:80
+      # (Recommended) Https
+      - --entrypoint.web.http.redirections.entryPoint.to=websecure
+      - --entrypoint.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.letsencryptresolver.acme.email=${EMAIL}
+      - --certificatesresolvers.letsencryptresolver.acme.storage=/acme.json
+      - --certificatesresolvers.letsencryptresolver.acme.tlschallenge=true
+      # -- (Optional) Enable Dashboard (secure with HTTP Basic Auth)
+      - --api.dashboard=true
+      # - --api.insecure=true
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro # allow Traefik to listen to Docker events
+      - ${TRAEFIK_DIR}/acme.json:/acme.json # stores ACME (HTTPS) certificates
+    labels:
+      - traefik.enable=true
+
+      # "admin" middleware definition
+      # to be used by services that do not have their own security
+      - traefik.http.middlewares.admin.basicauth.users=${HTTP_BASIC_USER}:${HTTP_BASIC_PWD}
+
+      # expose the traefik dashboard
+      - traefik.http.routers.traefik.entrypoints=websecure
+      - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAINNAME}`)
+      - traefik.http.routers.traefik.service=api@internal
+      - traefik.http.routers.traefik.middlewares=admin
+      - traefik.http.routers.traefik.tls.certresolver=letsencryptresolver
+
+networks:
+  traefik_network:
+    external: true

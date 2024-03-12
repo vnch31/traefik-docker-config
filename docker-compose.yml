@@ -2,16 +2,16 @@ services:
   traefik:
     image: traefik
     restart: unless-stopped
-    network:
+    networks:
       - traefik_network
-    commands:
+    command:
       - --providers.docker
       - --providers.docker.exposedbydefault=false
       - --providers.docker.network=traefik_network
       - --entrypoints.web.address=:80
       # (Recommended) Https
-      - --entrypoint.web.http.redirections.entryPoint.to=websecure
-      - --entrypoint.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
       - --entrypoints.websecure.address=:443
       - --certificatesresolvers.letsencryptresolver.acme.email=${EMAIL}
       - --certificatesresolvers.letsencryptresolver.acme.storage=/acme.json

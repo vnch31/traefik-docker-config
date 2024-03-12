@@ -23,7 +23,8 @@ labels:
   - "traefik.enable=true"
   - "traefik.http.routers.<service-name>.rule=Host(`<service-domain>`)"
   - "traefik.http.routers.<service-name>.entrypoints=websecure"
-  - "traefik.http.routers.<service-name>.tls.certresolver=myresolver"
+  - "traefik.http.routers.<service-name>.tls.certresolver=letsencryptresolver"
+  - "traefik.http.routers.<service-name>.tls=true"
 ```
 
 Now you can run `docker compose -f docker-compose-<service-name>.yml up -d` to start the service and it will be automatically added to Traefik.

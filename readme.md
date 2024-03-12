@@ -18,10 +18,12 @@
 To add a new service to Traefik, you need to have an image running in a container.
 Then you can create a new `docker-compose-<service-name>.yml` file in the `services` directory and add the following labels to the service:
 
+> Optionnal: you can copy the `.env` from the current directory to `services/` and use the `DOMAINNAME` variable in the labels or you can directly replace `<service-name>` with the name of your service.
+
 ```yaml
 labels:
   - "traefik.enable=true"
-  - "traefik.http.routers.<service-name>.rule=Host(`<service-domain>`)"
+  - "traefik.http.routers.<service-name>.rule=Host(`${DOMAINNAME}`)"
   - "traefik.http.routers.<service-name>.entrypoints=websecure"
   - "traefik.http.routers.<service-name>.tls.certresolver=letsencryptresolver"
   - "traefik.http.routers.<service-name>.tls=true"

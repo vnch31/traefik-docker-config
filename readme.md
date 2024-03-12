@@ -23,10 +23,11 @@ Then you can create a new `docker-compose-<service-name>.yml` file in the `servi
 ```yaml
 labels:
   - "traefik.enable=true"
-  - "traefik.http.routers.<service-name>.rule=Host(`${DOMAINNAME}`)"
-  - "traefik.http.routers.<service-name>.entrypoints=websecure"
-  - "traefik.http.routers.<service-name>.tls.certresolver=letsencryptresolver"
-  - "traefik.http.routers.<service-name>.tls=true"
+  - "traefik.http.routers.<service-name>.rule=Host(`${DOMAINNAME}`)" # domaine name
+  - "traefik.http.routers.<service-name>.entrypoints=websecure" # incoming port
+  - "traefik.http.services.<service-name>.loadbalancer.server.port=<port>" # docker port
+  - "traefik.http.routers.<service-name>.tls.certresolver=letsencryptresolver" # certificate resolver
+  - "traefik.http.routers.<service-name>.tls=true" # use tls
 ```
 
 Now you can run `docker compose -f docker-compose-<service-name>.yml up -d` to start the service and it will be automatically added to Traefik.
